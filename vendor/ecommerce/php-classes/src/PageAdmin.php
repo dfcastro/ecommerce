@@ -1,4 +1,5 @@
 <?php 
+
 namespace Ecommerce;
 
 class PageAdmin extends Page {
@@ -12,4 +13,4 @@ class PageAdmin extends Page {
 
 }
 
- ?>
+?>
