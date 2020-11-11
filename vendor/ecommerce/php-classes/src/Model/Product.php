@@ -58,7 +58,7 @@ class Product extends Model
 		$this->setData($results[0]);
 
 	}
-	public function delete()
+	public function delete($idproduct)
 	{
 		$sql = new Sql();
 
