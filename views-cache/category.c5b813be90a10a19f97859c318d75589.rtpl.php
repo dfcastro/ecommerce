@@ -16,7 +16,7 @@
         <div class="row">
             <?php $counter1=-1;  if( isset($products) && ( is_array($products) || $products instanceof Traversable ) && sizeof($products) ) foreach( $products as $key1 => $value1 ){ $counter1++; ?>
 
-            <div class="col-md-3 col-sm-6">
+            <div class="col-md-4 col-sm-8">
                 <div class="single-shop-product">
                     <div class="product-upper">
                         <img src="<?php echo htmlspecialchars( $value1["desphoto"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" alt="">
