@@ -134,5 +134,3 @@ $app->get("/admin/categories/:idcategory/products/:idproduct/remove", function($
 });
 
  ?>
-
- ?>
