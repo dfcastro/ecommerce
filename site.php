@@ -3,6 +3,9 @@
 use \Ecommerce\Page;
 use \Ecommerce\Model\Product;
 use \Ecommerce\Model\Category;
+use \Ecommerce\Model\Cart;
+
+
 $app->get('/', function() {
     
     $products = Product::listAll();
@@ -57,5 +60,14 @@ $app->get("/products/:desurl", function($desurl)
 ]);
 
 });
+
+
+$app->get("/cart", function()
+{
+	$cart = Cart::getFromSession();
+	$page = new Page();
+
+	$page->setTpl("cart");
+})
 
  ?>
