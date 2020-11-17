@@ -243,11 +243,11 @@ class User extends Model {
 
 				if ($inadmin === true) {
 
-					$link = "http://www.hcodecommerce.com.br/admin/forgot/reset?code=$code";
+					$link = "http://www.ecommerce.com.br/admin/forgot/reset?code=$code";
 
 				} else {
 
-					$link = "http://www.hcodecommerce.com.br/forgot/reset?code=$code";
+					$link = "http://www.ecommerce.com.br/forgot/reset?code=$code";
 					
 				}				
 
@@ -303,7 +303,7 @@ class User extends Model {
 
 	}
 	
-	public static function setFogotUsed($idrecovery)
+	public static function setForgotUser($idrecovery)
 	{
 
 		$sql = new Sql();
