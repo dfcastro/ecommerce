@@ -66,35 +66,39 @@ $app->get("/products/:desurl", function($desurl)
 });
 
 
-$app->get("/cart", function()
-{
+$app->get("/cart", function(){
+
 	$cart = Cart::getFromSession();
+
 	$page = new Page();
-	
-	$page->setTpl("cart",[
-		"cart"=>$cart->getValues(),
-		"products"=>$cart->getProducts(),
-		"error"=>Cart::getMsgError()]);
+
+	$page->setTpl("cart", [
+		'cart'=>$cart->getValues(),
+		'products'=>$cart->getProducts(),
+		'error'=>Cart::getMsgError()
+	]);
+
 });
 
-$app->get("/cart/:idproduct/add", function($idproduct)
-{
+$app->get("/cart/:idproduct/add", function($idproduct){
+
 	$product = new Product();
 
 	$product->get((int)$idproduct);
 
 	$cart = Cart::getFromSession();
 
-	$qtd=(isset($_GET['qtd'])) ? (int)$_GET['qtd']:1;
+	$qtd = (isset($_GET['qtd'])) ? (int)$_GET['qtd'] : 1;
 
-	for ($i=1; $i <$qtd ; $i++) { 
+	for ($i = 0; $i < $qtd; $i++) {
+		
 		$cart->addProduct($product);
-	}
 
-	$cart->addProduct($product);
+	}
 
 	header("Location: /cart");
 	exit;
+
 });
 
 $app->get("/cart/:idproduct/minus", function($idproduct)
@@ -234,22 +238,23 @@ $app->post("/checkout", function()
 	$address->save();
 
 	$cart = Cart::getFromSession();
-	$totals= $cart->getValues();
+	$cart->getCalculateTotal();
 
 	$order = new Order();
 
 	$order->setData([
-		"idcart"=>$cart->getidcart(),
-		"idaddress"=>$address->getidaddress(),
-		"iduser"=>$user->getiduser(),
-		"idstatus"=>OrderStatus::EM_ABERTO,
-		"vltotal"=>$totals["vltotal"] 
+		'idcart'=>$cart->getidcart(),
+		'idaddress'=>$address->getidaddress(),
+		'iduser'=>$user->getiduser(),
+		'idstatus'=>OrderStatus::EM_ABERTO,
+		'vltotal'=>$cart->getvltotal()
 	]);
-		
 
 	
 	$order->save();
+	
 	header("Location: /order/".$order->getidorder());
+
 	exit;
 
 });
@@ -493,8 +498,9 @@ $app->get("/boleto/:idorder", function($idorder){
 	$dias_de_prazo_para_pagamento = 10;
 	$taxa_boleto = 5.00;
 	$data_venc = date("d/m/Y", time() + ($dias_de_prazo_para_pagamento * 86400));  // Prazo de X dias OU informe data: "13/04/2006"; 
-	$valor_cobrado = $order->getvltotal();
+	$valor_cobrado = formatPrice($order->getvltotal());
 		// Valor - REGRA: Sem pontos na milhar e tanto faz com "." ou "," ou com 1 ou 2 ou sem casa decimal
+	$valor_cobrado=str_replace(".","", $valor_cobrado);
 	$valor_cobrado = str_replace(",", ".",$valor_cobrado);
 	$valor_boleto=number_format($valor_cobrado+$taxa_boleto, 2, ',', '');
 
@@ -555,4 +561,39 @@ $app->get("/boleto/:idorder", function($idorder){
 });
 
 
+$app->get("/profile/orders", function ()
+{
+	User::verifyLogin(false);
+
+	$user= User::getFromSession();
+
+
+	$page = new Page();
+
+	$page->setTpl("profile-orders",[
+		"orders"=>$user->getOrders()
+	]);
+});
+
+$app->get("/profile/orders/:idorder", function($idorder)
+{
+	User::verifyLogin(false);
+	$order = new Order();
+
+	$order->get((int)$idorder);
+	
+	$cart = new Cart();
+
+	$cart->get((int)$order->getidcart());
+	$cart->getCalculateTotal();
+	$page = new Page();
+
+	$page->setTpl("profile-orders-detail",[
+		"order"=>$order->getValues(),
+		"cart"=>$cart->getValues(),
+		"products"=>$cart->getProducts()]);
+});
+
+
+$app->get("")
  ?>
