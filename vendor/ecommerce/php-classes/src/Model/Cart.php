@@ -66,7 +66,7 @@ class Cart extends Model {
 
 		$sql = new Sql();
 
-		$results = $sql->select("SELECT * FROM tb_carts WHERE dessessionid = :dessessionid and dtbought is NULL", [
+		$results = $sql->select("SELECT * FROM tb_carts WHERE dessessionid = :dessessionid", [
 			':dessessionid'=>session_id()
 		]);
 
@@ -152,13 +152,9 @@ class Cart extends Model {
 
 	}
 
-	public function clearCart($idcart)
+	public static function removeFromSession()
 	{
-		$sql = new Sql();
-		$sql->query("UPDATE tb_carts SET dtbought = NOW() WHERE idcart = :idcart AND dtbought IS NULL", [
-				':idcart'=>$this->getidcart()
-			]);
-
+   		 $_SESSION[Cart::SESSION] = NULL;
 	}
 
 	public function getProducts()
