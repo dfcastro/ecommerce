@@ -4,6 +4,7 @@ use \Ecommerce\Model\User;
 use \Ecommerce\Model\Category;
 
 
+
 $app->get('/admin', function() {
     
     User::verifyLogin();

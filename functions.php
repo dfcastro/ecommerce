@@ -39,4 +39,10 @@ function getCartVlSubtotal()
 
 	return formatPrice($totals["vlprice"]);
 }
+
+function formatDate($date)
+{
+	return date('d/m/Y', strtotime($date));
+}
+
  ?>
