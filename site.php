@@ -198,6 +198,11 @@ $app->post("/checkout", function()
 		header('Location: /checkout');
 		exit;
 	}
+	if (!isset($_POST['desnumber']) || $_POST['desnumber'] === '') {
+		Address::setMsgError("Informe o número.");
+		header('Location: /checkout');
+		exit;
+	}
 
 	if (!isset($_POST['desdistrict']) || $_POST['desdistrict'] === '') {
 		Address::setMsgError("Informe o bairro.");
@@ -228,8 +233,6 @@ $app->post("/checkout", function()
 	$address = new Address();
 
 
-	
-
 	$_POST['deszipcode'] = $_POST['zipcode'];
 	$_POST['idperson'] = $user->getidperson();
 
@@ -250,12 +253,12 @@ $app->post("/checkout", function()
 		'vltotal'=>$cart->getvltotal()
 	]);
 
-	
+
 	$order->save();
+
+	header("Location: /order/".$order->getidorder());
 	Cart::removeFromSession();
     session_regenerate_id();
-	header("Location: /order/".$order->getidorder());
-
 	exit;
 
 });
